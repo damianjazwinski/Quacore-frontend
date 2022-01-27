@@ -102,3 +102,23 @@ dist
 
 # TernJS port file
 .tern-port
+
+# dependencies
+/node_modules
+
+# testing
+/coverage
+
+# production
+/build
+
+# misc
+.DS_Store
+.env
+npm-debug.log
+
+# sass
+.sass-cache/
+*.css.map
+*.sass.map
+*.scss.map
