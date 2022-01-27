@@ -1,0 +1,15 @@
+@use "../../variables.scss";
+
+.navbar {
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    background-color: variables.$primary-color-light;
+  }
+  #toolbar-button {
+    margin-left: auto;
+  }
+  #quacore-logo {
+    margin-right: 10vw;
+  }
+}

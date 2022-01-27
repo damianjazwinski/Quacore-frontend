@@ -1,0 +1,11 @@
+{
+  "dependencies": {
+    "@mui/icons-material": "^5.2.5",
+    "@reduxjs/toolkit": "^1.7.1",
+    "react-redux": "^7.2.6",
+    "react-router-dom": "6"
+  },
+  "devDependencies": {
+    "redux-devtools": "^3.7.0"
+  }
+}
