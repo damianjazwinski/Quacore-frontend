@@ -60,16 +60,27 @@ const Home = () => {
             submitQuackHandler={submitQuackHandler}
             buttonDisabled={buttonDisabled}
           />
-          {quacksFeed.map((quack, index) => (
-            <>
-              <Quack
-                key={index}
-                createdAt={quack.createdAt}
-                user={quack.username}
-                content={quack.content}
-              />
-            </>
-          ))}
+          {quacksFeed.map((quack, index) => {
+            if (index === quacksFeed.length - 1) {
+              return (
+                <Quack
+                  key={index}
+                  createdAt={quack.createdAt}
+                  user={quack.username}
+                  content={quack.content}
+                  ref={quackObserverHandler}
+                />
+              );
+            } else
+              return (
+                <Quack
+                  key={index}
+                  createdAt={quack.createdAt}
+                  user={quack.username}
+                  content={quack.content}
+                />
+              );
+          })}
         </div>
       </div>
     </div>
