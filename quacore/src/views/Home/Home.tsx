@@ -3,34 +3,51 @@ import { addQuack, getQuacksFeed } from "../../api/apiQuacks";
 import NavBar from "../../components/NavBar/NavBar";
 import Quack from "../../components/Quack/Quack";
 import QuackInput from "../../components/QuackInput/QuackInput";
+import { Quack as QuackType } from "../../types/types";
 import "./home.scss";
 
 const Home = () => {
   const [quackInputValue, setQuackInputValue] = useState("");
   const [buttonDisabled, setButtonDisabled] = useState(quackInputValue === "");
-  const [quacksFeed, setQuacksFeed] = useState<any[]>([]);
+  const [quacksFeed, setQuacksFeed] = useState<QuackType[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
 
   const lastQuackVisibleObserver = useRef<IntersectionObserver>();
+  const isLoading = useRef(false);
 
-  const quackObserverHandler = useCallback(() => {
-    lastQuackVisibleObserver.current = new IntersectionObserver((entires) => {
-      if (entires[0].isIntersecting && true) {
-        setShouldFetch(true);
-        setIsLoading(true);
-      }
-    });
-  }, []); // teraz trzeba to serio zaobserwować
+  const quackObserverHandler = (element: HTMLDivElement | null) => {
+    console.log(element);
+    if (!element) {
+      lastQuackVisibleObserver.current?.disconnect();
+      return;
+    }
+    if (isLoading.current) return;
+    if (lastQuackVisibleObserver.current === undefined) {
+      lastQuackVisibleObserver.current = new IntersectionObserver(
+        (entires) => {
+          console.log("Entries: ", entires);
+          if (entires[0].isIntersecting) {
+            lastQuackVisibleObserver.current?.disconnect();
+            setShouldFetch(true);
+          }
+        },
+        { rootMargin: "300px" }
+      );
+    }
+    lastQuackVisibleObserver.current.observe(element);
+  };
 
   useEffect(() => {
     if (!shouldFetch) return;
 
-    getQuacksFeed(quacksFeed[quacksFeed.length - 1])
+    isLoading.current = true;
+    getQuacksFeed(quacksFeed[quacksFeed.length - 1]?.id)
       .then((response) => response.json())
-      .then((response) =>
-        setQuacksFeed((quacksFeed) => [...quacksFeed, ...response.quacks])
-      );
+      .then((response) => {
+        setShouldFetch(false);
+        isLoading.current = false;
+        setQuacksFeed((quacksFeed) => [...quacksFeed, ...response.quacks]);
+      });
   }, [shouldFetch]);
 
   const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
