@@ -7,19 +7,22 @@ type QuackProps = {
   content: string;
 };
 
-const Quack = React.forwardRef<HTMLDivElement, QuackProps>(
-  ({ user, createdAt, content }, ref) => {
-    return (
-      <div className="quack" ref={ref}>
-        <div className="quack-top">
-          <span className="quack-user">{user}</span>
-          <span>•</span>
-          <span className="quack-timestamp">{createdAt}</span>
+const Quack = React.memo(
+  React.forwardRef<HTMLDivElement, QuackProps>(
+    ({ user, createdAt, content }, ref) => {
+      console.count("Quack");
+      return (
+        <div className="quack" ref={ref}>
+          <div className="quack-top">
+            <span className="quack-user">{user}</span>
+            <span>•</span>
+            <span className="quack-timestamp">{createdAt}</span>
+          </div>
+          <div className="quack-body">{content}</div>
         </div>
-        <div className="quack-body">{content}</div>
-      </div>
-    );
-  }
+      );
+    }
+  )
 );
 
 export default Quack;

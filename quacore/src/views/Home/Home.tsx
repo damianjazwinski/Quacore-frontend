@@ -15,8 +15,7 @@ const Home = () => {
   const lastQuackVisibleObserver = useRef<IntersectionObserver>();
   const isLoading = useRef(false);
 
-  const quackObserverHandler = (element: HTMLDivElement | null) => {
-    console.log(element);
+  const quackObserverHandler = useCallback((element: HTMLDivElement | null) => {
     if (!element) {
       lastQuackVisibleObserver.current?.disconnect();
       return;
@@ -24,9 +23,8 @@ const Home = () => {
     if (isLoading.current) return;
     if (lastQuackVisibleObserver.current === undefined) {
       lastQuackVisibleObserver.current = new IntersectionObserver(
-        (entires) => {
-          console.log("Entries: ", entires);
-          if (entires[0].isIntersecting) {
+        ([entry]) => {
+          if (entry.isIntersecting) {
             lastQuackVisibleObserver.current?.disconnect();
             setShouldFetch(true);
           }
@@ -35,7 +33,7 @@ const Home = () => {
       );
     }
     lastQuackVisibleObserver.current.observe(element);
-  };
+  }, []);
 
   useEffect(() => {
     if (!shouldFetch) return;
@@ -77,27 +75,17 @@ const Home = () => {
             submitQuackHandler={submitQuackHandler}
             buttonDisabled={buttonDisabled}
           />
-          {quacksFeed.map((quack, index) => {
-            if (index === quacksFeed.length - 1) {
-              return (
-                <Quack
-                  key={index}
-                  createdAt={quack.createdAt}
-                  user={quack.username}
-                  content={quack.content}
-                  ref={quackObserverHandler}
-                />
-              );
-            } else
-              return (
-                <Quack
-                  key={index}
-                  createdAt={quack.createdAt}
-                  user={quack.username}
-                  content={quack.content}
-                />
-              );
-          })}
+          {quacksFeed.map((quack, index) => (
+            <Quack
+              key={index}
+              createdAt={quack.createdAt}
+              user={quack.username}
+              content={quack.content}
+              ref={
+                index === quacksFeed.length - 1 ? quackObserverHandler : null
+              }
+            />
+          ))}
         </div>
       </div>
     </div>
