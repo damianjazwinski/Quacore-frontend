@@ -3,7 +3,7 @@
 .quack {
   border-bottom: 1px solid variables.$border-style-light;
   padding: 1em 2em;
-  .quack-top {
+  &-top {
     margin-bottom: 12px;
     .quack-user {
       margin-right: 6px;
@@ -11,6 +11,12 @@
     .quack-timestamp {
       margin-left: 6px;
       color: grey;
+    }
+  }
+  &-body {
+    a {
+      text-decoration: none;
+      color: variables.$primary-color-light;
     }
   }
 }

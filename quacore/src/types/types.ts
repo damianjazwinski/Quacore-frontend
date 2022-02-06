@@ -4,4 +4,5 @@ export type Quack = {
   createdAt: string;
   userId: number;
   username: string;
+  mentions: string[];
 };

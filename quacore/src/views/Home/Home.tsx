@@ -77,10 +77,8 @@ const Home = () => {
           />
           {quacksFeed.map((quack, index) => (
             <Quack
-              key={index}
-              createdAt={quack.createdAt}
-              user={quack.username}
-              content={quack.content}
+              key={quack.id}
+              quack={quack}
               ref={
                 index === quacksFeed.length - 1 ? quackObserverHandler : null
               }

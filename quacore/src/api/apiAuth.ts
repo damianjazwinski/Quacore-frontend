@@ -13,3 +13,10 @@ export const login = (username: string, password: string) => {
 export const logout = () => {
   return fetchApi("user", "logout", "GET");
 };
+export const register = (registerData: {
+  username: string;
+  password: string;
+  email: string;
+}) => {
+  return fetchApi("user", "register", "POST", registerData, false);
+};

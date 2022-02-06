@@ -1,7 +1,8 @@
 import { Button, TextField } from "@mui/material";
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
-import { Navigate, NavLink } from "react-router-dom";
+import { Navigate, NavLink, useNavigate } from "react-router-dom";
+import { register } from "../../api/apiAuth";
 import { RootState } from "../../store";
 import "./register.scss";
 
@@ -12,7 +13,7 @@ const Register = ({ header }: RegisterProps) => {
     password: "",
     email: "",
   });
-
+  const navigate = useNavigate();
   const textChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -26,22 +27,11 @@ const Register = ({ header }: RegisterProps) => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const apiUrl = "https://localhost:5001/api";
-
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    const requestOptions: RequestInit = {
-      method: "POST",
-      headers: myHeaders,
-      body: JSON.stringify(registerData),
-      redirect: "follow",
-    };
-
-    fetch(apiUrl + "/user/register", requestOptions)
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
+    register(registerData).then((resp) => {
+      if (resp.ok) {
+        navigate("/login");
+      }
+    });
   };
 
   if (auth) return <Navigate to="/" replace></Navigate>;
