@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../store";
-import Login from "../views/Login/Login";
+import { Navigate } from "react-router-dom";
 
 type ProtectedRouteProps = {
   children: JSX.Element;
@@ -9,7 +9,7 @@ type ProtectedRouteProps = {
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const auth = useSelector((state: RootState) => state.quacore.auth);
   if (auth) return children;
-  else return <Login header="Login"></Login>;
+  else return <Navigate to="/login" replace />;
 };
 
 export default ProtectedRoute;

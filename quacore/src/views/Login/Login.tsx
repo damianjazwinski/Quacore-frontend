@@ -7,8 +7,8 @@ import { login as loginReducer } from "../../slice";
 import { RootState } from "../../store";
 import "./login.scss";
 
-type LoginProps = { header: string };
-const Login = ({ header }: LoginProps) => {
+type LoginProps = {};
+const Login = () => {
   const [loginData, setLoginData] = useState({
     username: "",
     password: "",
@@ -42,7 +42,7 @@ const Login = ({ header }: LoginProps) => {
   return (
     <div className="login">
       <form onSubmit={submitHandler}>
-        <h1>{header}</h1>
+        <h1>Login</h1>
         <TextField
           name="username"
           label="Username"

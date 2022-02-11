@@ -1,6 +1,7 @@
 import React from "react";
 import "./quack.scss";
 import { Quack as QuackType } from "../../types/types";
+import { Link } from "react-router-dom";
 
 type QuackProps = {
   quack: QuackType;
@@ -38,9 +39,14 @@ const Quack = React.memo(
           <div className="quack-body">
             {chunks.map((chunk, index) =>
               chunk.isMention ? (
-                <a key={index} href="#">
+                <Link
+                  key={index}
+                  to={{
+                    pathname: `/users/${chunk.chunkContent.slice(1)}`,
+                  }}
+                >
                   {chunk.chunkContent}
-                </a>
+                </Link>
               ) : (
                 chunk.chunkContent
               )

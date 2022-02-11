@@ -3,6 +3,7 @@ import { addQuack, getQuacksFeed } from "../../api/apiQuacks";
 import NavBar from "../../components/NavBar/NavBar";
 import Quack from "../../components/Quack/Quack";
 import QuackInput from "../../components/QuackInput/QuackInput";
+import QuacoreLayout from "../../components/QuacoreLayout/QuacoreLayout";
 import { Quack as QuackType } from "../../types/types";
 import "./home.scss";
 
@@ -65,28 +66,23 @@ const Home = () => {
   };
 
   return (
-    <div className="home">
-      <NavBar />
-      <div className="home-feed-wrapper">
-        <div className="home-feed">
-          <QuackInput
-            content={quackInputValue}
-            changeHandler={changeHandler}
-            submitQuackHandler={submitQuackHandler}
-            buttonDisabled={buttonDisabled}
+    <QuacoreLayout>
+      <>
+        <QuackInput
+          content={quackInputValue}
+          changeHandler={changeHandler}
+          submitQuackHandler={submitQuackHandler}
+          buttonDisabled={buttonDisabled}
+        />
+        {quacksFeed.map((quack, index) => (
+          <Quack
+            key={quack.id}
+            quack={quack}
+            ref={index === quacksFeed.length - 1 ? quackObserverHandler : null}
           />
-          {quacksFeed.map((quack, index) => (
-            <Quack
-              key={quack.id}
-              quack={quack}
-              ref={
-                index === quacksFeed.length - 1 ? quackObserverHandler : null
-              }
-            />
-          ))}
-        </div>
-      </div>
-    </div>
+        ))}
+      </>
+    </QuacoreLayout>
   );
 };
 

@@ -6,8 +6,8 @@ import { register } from "../../api/apiAuth";
 import { RootState } from "../../store";
 import "./register.scss";
 
-type RegisterProps = { header: string };
-const Register = ({ header }: RegisterProps) => {
+type RegisterProps = {};
+const Register = () => {
   const [registerData, setRegisterData] = useState({
     username: "",
     password: "",
@@ -39,7 +39,7 @@ const Register = ({ header }: RegisterProps) => {
   return (
     <div className="register">
       <form onSubmit={submitHandler}>
-        <h1>{header}</h1>
+        <h1>Register</h1>
         <TextField
           name="username"
           label="Username"

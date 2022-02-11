@@ -5,6 +5,8 @@ import Login from "./views/Login/Login";
 import Home from "./views/Home/Home";
 import { Routes, Route, BrowserRouter } from "react-router-dom";
 import ProtectedRoute from "./helpers/ProtectedRoute";
+import Profile from "./views/Profile/Profile";
+import QuacoreLayout from "./components/QuacoreLayout/QuacoreLayout";
 
 function App() {
   return (
@@ -19,8 +21,17 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="/register" element={<Register header="Register" />} />
-          <Route path="/login" element={<Login header="Login" />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+
+          <Route
+            path="/users/:username"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </BrowserRouter>
     </div>
