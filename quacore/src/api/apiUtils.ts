@@ -5,9 +5,11 @@ export const apiUrl = "https://localhost:5001/api/";
 export const fetchApi = (
   controller: string,
   action: string,
-  method = "GET",
-  payload: any = undefined,
-  authorized = true
+  {
+    method = "GET",
+    payload = undefined,
+    authorized = true,
+  }: { method?: string; payload?: any; authorized?: boolean } = {}
 ) => {
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");

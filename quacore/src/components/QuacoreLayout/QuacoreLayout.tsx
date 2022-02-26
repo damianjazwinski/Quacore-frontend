@@ -8,10 +8,10 @@ type QuacoreLayoutProps = {
 
 const QuacoreLayout = ({ children, className = "" }: QuacoreLayoutProps) => {
   return (
-    <div className={`quacore-layout ${className}`}>
+    <div className={"quacore-layout"}>
       <NavBar />
       <div className="quacore-layout-body">
-        <div>{children}</div>
+        <div className={className}>{children}</div>
       </div>
     </div>
   );

@@ -6,3 +6,10 @@ export type Quack = {
   username: string;
   mentions: string[];
 };
+
+export type Profile = {
+  description: string | null;
+  avatarImageLink: string | null;
+  bannerImageLink: string | null;
+  username: string;
+};

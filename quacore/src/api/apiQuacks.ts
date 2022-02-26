@@ -1,7 +1,7 @@
 import { fetchApi } from "./apiUtils";
 
 export const addQuack = (content: string) => {
-  return fetchApi("quack", "add", "POST", { content });
+  return fetchApi("quack", "add", { method: "POST", payload: { content } });
 };
 
 export const getQuacksFeed = (startingId: number | null) => {

@@ -8,15 +8,23 @@ export interface LoginResponse {
 }
 
 export const login = (username: string, password: string) => {
-  return fetchApi("user", "login", "POST", { username, password }, false);
+  return fetchApi("user", "login", {
+    method: "POST",
+    payload: { username, password },
+    authorized: false,
+  });
 };
 export const logout = () => {
-  return fetchApi("user", "logout", "GET");
+  return fetchApi("user", "logout");
 };
 export const register = (registerData: {
   username: string;
   password: string;
   email: string;
 }) => {
-  return fetchApi("user", "register", "POST", registerData, false);
+  return fetchApi("user", "register", {
+    method: "POST",
+    payload: registerData,
+    authorized: false,
+  });
 };

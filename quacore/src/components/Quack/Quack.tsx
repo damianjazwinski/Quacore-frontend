@@ -42,7 +42,7 @@ const Quack = React.memo(
                 <Link
                   key={index}
                   to={{
-                    pathname: `/users/${chunk.chunkContent.slice(1)}`,
+                    pathname: `/profile/${chunk.chunkContent.slice(1)}`,
                   }}
                 >
                   {chunk.chunkContent}
