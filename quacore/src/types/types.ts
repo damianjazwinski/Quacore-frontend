@@ -12,4 +12,5 @@ export type Profile = {
   avatarImageLink: string | null;
   bannerImageLink: string | null;
   username: string;
+  joinDate: Date;
 };

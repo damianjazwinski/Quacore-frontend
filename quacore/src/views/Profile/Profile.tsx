@@ -4,16 +4,26 @@ import NavBar from "../../components/NavBar/NavBar";
 import QuacoreLayout from "../../components/QuacoreLayout/QuacoreLayout";
 import { getProfile } from "../../api/apiProfiles";
 import { useParams } from "react-router-dom";
-import { Profile as ProfileType } from "../../types/types";
+import { Profile as ProfileType, Quack as QuackType } from "../../types/types";
+import moment from "moment";
+import Quack from "../../components/Quack/Quack";
+import { getQuacksFeedForUser } from "../../api/apiQuacks";
 
 const Profile = () => {
   const [profile, setProfile] = useState<ProfileType>();
+  const [quacks, setQuacks] = useState<QuackType[]>([]);
   const { username } = useParams();
 
   useEffect(() => {
-    getProfile(username!)
-      .then((response) => response.json())
-      .then((profile) => setProfile(profile));
+    (async () => {
+      const response = await getProfile(username!);
+      const profile = await response.json();
+      setProfile(profile);
+      // quacks fetching
+      const quackResponse = await getQuacksFeedForUser(username!);
+      const quacksData = await quackResponse.json();
+      setQuacks(quacksData.quacks);
+    })();
   }, []);
 
   return (
@@ -43,7 +53,31 @@ const Profile = () => {
             </div>
           </div>
         </div>
-        <div className="profile-stats"></div>
+        <div className="profile-stats">
+          <div className="profile-stats-followers">
+            <span>
+              <b>420</b>&nbsp;
+            </span>
+            <span>Followers</span>
+          </div>
+          <div className="profile-stats-followees">
+            <span>
+              <b>710</b>&nbsp;
+            </span>
+            <span>Followees</span>
+          </div>
+          <div className="profile-stats-joined">
+            <span>Joined </span>
+            <span>
+              <b>{moment(profile?.joinDate).format("DD.MM.YYYY")}</b>
+            </span>
+          </div>
+        </div>
+        <div className="profile-feed">
+          {quacks.map((quack, index) => (
+            <Quack quack={quack} key={quack.id} />
+          ))}
+        </div>
       </>
     </QuacoreLayout>
   );

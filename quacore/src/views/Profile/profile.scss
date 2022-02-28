@@ -29,9 +29,9 @@
   }
 
   &-header {
-    height: 100px;
     display: flex;
     flex-direction: row;
+    min-height: 100px;
 
     &-avatar {
       max-width: 150px;
@@ -41,6 +41,7 @@
       line-height: 0;
       // avatar
       img {
+        background-color: white;
         flex-grow: 1;
         max-width: 100%;
         object-fit: cover;
@@ -67,11 +68,30 @@
       }
 
       &-description {
-        margin: 1px 1px 1px 1px;
+        font-size: 0.8em;
+        margin: 1px 24px 1px 1px;
+        word-break: break-word;
+        white-space: pre-wrap;
+        color: variables.$text-color-secondary;
       }
     }
   }
 
   &-stats {
+    min-height: 30px;
+    display: flex;
+    justify-content: space-around;
+    padding-bottom: 1.2em;
+    font-size: 1.05em;
+    border-bottom: 1px solid variables.$border-style-light;
+
+    &-followers {
+    }
+
+    &-followees {
+    }
+
+    &-joined {
+    }
   }
 }
