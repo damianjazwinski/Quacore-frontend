@@ -1,0 +1,4 @@
+@font-face {
+  font-family: DuckRegular;
+  src: local(DuckRegular), url(./Duck-Regular.otf) format("opentype");
+}

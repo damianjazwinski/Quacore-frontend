@@ -1,22 +1,23 @@
 @use "./../../variables.scss";
 
 .quacore-layout {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
+  background-color: variables.$secondary-color;
 
   .quacore-layout-body {
-    margin-top: 72px;
+    margin-top: 62px;
     display: flex;
     width: 100vw;
     max-width: 100%;
     > div {
+      background-color: white;
       margin: 0 auto;
       flex-grow: 1;
       max-width: 800px;
       border-left: 1px solid variables.$border-style-light;
       border-right: 1px solid variables.$border-style-light;
-      //background-color: white;
       box-shadow: 0 4px 15px 2px rgba(0, 0, 0, 0.1);
     }
   }

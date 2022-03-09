@@ -8,6 +8,7 @@ import {
   TextField,
   Toolbar,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -18,6 +19,9 @@ import SearchIcon from "@mui/icons-material/Search";
 
 const NavBar = () => {
   const dispatch = useDispatch();
+
+  const theme = useTheme();
+
   const logoutHandler = () => {
     logout()
       .then((response) => {
@@ -30,19 +34,20 @@ const NavBar = () => {
     <div className="navbar">
       <AppBar>
         <Toolbar className="toolbar">
-          <Typography sx={{ textAlign: "start" }}>
-            <NavLink id="quacore-logo" className="unstyled-link" to="/">
+          <Typography id="quacore-logo" sx={{ textAlign: "start" }}>
+            <NavLink className="unstyled-link" to="/">
               Quacore
             </NavLink>
           </Typography>
           <TextField
-            color="secondary"
-            variant="standard"
+            className="toolbar-search"
+            sx={{ input: { color: "white" } }}
             placeholder="Search user"
+            variant="standard"
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
-                  <SearchIcon />
+                  <SearchIcon sx={{ color: "white" }} />
                 </InputAdornment>
               ),
               disableUnderline: true,
@@ -50,9 +55,11 @@ const NavBar = () => {
           ></TextField>
           <Button
             id="toolbar-button"
-            color="inherit"
-            variant="outlined"
             onClick={logoutHandler}
+            sx={{
+              backgroundColor: theme.palette.primary.main,
+              color: theme.palette.secondary.contrastText,
+            }}
           >
             Logout
           </Button>

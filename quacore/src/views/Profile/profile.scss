@@ -5,7 +5,7 @@
   $border-color: white;
 
   &-banner {
-    height: 150px;
+    height: 190px;
     display: flex;
     justify-content: stretch;
     border-bottom: $border-width solid $border-color;
@@ -69,10 +69,17 @@
 
       &-description {
         font-size: 0.8em;
-        margin: 1px 24px 1px 1px;
+        margin: 1px 24px 24px 1px;
         word-break: break-word;
         white-space: pre-wrap;
         color: variables.$text-color-secondary;
+      }
+    }
+
+    &-button {
+      margin: 20px 40px 0 auto;
+      button {
+        width: 120px;
       }
     }
   }

@@ -8,12 +8,14 @@ import { Profile as ProfileType, Quack as QuackType } from "../../types/types";
 import moment from "moment";
 import Quack from "../../components/Quack/Quack";
 import { getQuacksFeedForUser } from "../../api/apiQuacks";
+import { Button } from "@mui/material";
+import { getUsernameFromClaims } from "../../helpers/getUserInfo";
 
 const Profile = () => {
   const [profile, setProfile] = useState<ProfileType>();
   const [quacks, setQuacks] = useState<QuackType[]>([]);
   const { username } = useParams();
-
+  //__________________________________________________________
   useEffect(() => {
     (async () => {
       const response = await getProfile(username!);
@@ -24,8 +26,14 @@ const Profile = () => {
       const quacksData = await quackResponse.json();
       setQuacks(quacksData.quacks);
     })();
-  }, []);
-
+  }, [username]);
+  //____________________________________________________
+  function generateButton(): React.ReactNode {
+    if (getUsernameFromClaims() === username)
+      return <Button variant="contained">Edit</Button>;
+    else return <Button variant="contained">Follow</Button>;
+  }
+  //____________________________________________________________
   return (
     <QuacoreLayout className="profile">
       <>
@@ -52,6 +60,7 @@ const Profile = () => {
               {profile?.description}
             </div>
           </div>
+          <div className="profile-header-button">{generateButton()}</div>
         </div>
         <div className="profile-stats">
           <div className="profile-stats-followers">

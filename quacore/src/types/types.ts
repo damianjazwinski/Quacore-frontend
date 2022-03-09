@@ -14,3 +14,12 @@ export type Profile = {
   username: string;
   joinDate: Date;
 };
+
+export type JwtToken = {
+  User: string;
+  Username: string;
+  nbf: number;
+  exp: number;
+  iss: string;
+  aud: string;
+};

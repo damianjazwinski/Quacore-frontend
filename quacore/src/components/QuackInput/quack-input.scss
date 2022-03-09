@@ -5,8 +5,23 @@
   border-bottom: 1px solid variables.$border-style-light;
   height: 5em;
 
+  &-profile {
+    $avatar-dim: 80px;
+    $avatar-padding: 20px;
+    max-width: $avatar-dim;
+    flex: 0 0 auto;
+    padding-right: $avatar-padding;
+    padding-top: $avatar-padding / 2;
+
+    img {
+      width: $avatar-dim - $avatar-padding;
+      height: $avatar-dim - $avatar-padding;
+      border-radius: 50%;
+    }
+  }
+
   &-area {
-    flex-grow: 10;
+    flex-grow: 9;
     textarea {
       padding: 10px;
       resize: none;
@@ -34,7 +49,7 @@
       border-bottom-right-radius: 10px;
       width: 100%;
       height: 100%;
-      background-color: variables.$primary-color-lighter;
+      background-color: variables.$primary-color-light;
       border: none;
       color: white;
       font-weight: 600;
@@ -43,15 +58,15 @@
       cursor: pointer;
 
       &:hover:not(:disabled) {
-        background-color: lighten(variables.$primary-color-lighter, 5);
+        background-color: lighten(variables.$primary-color-light, 5);
       }
 
       &:active:not(:disabled) {
-        background-color: darken(variables.$primary-color-lighter, 5);
+        background-color: darken(variables.$primary-color-light, 5);
       }
 
       &:disabled {
-        background-color: lighten(variables.$primary-color-lighter, 15);
+        background-color: lighten(variables.$primary-color-light, 15);
       }
     }
   }
