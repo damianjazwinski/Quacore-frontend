@@ -6,7 +6,6 @@ import { register } from "../../api/apiAuth";
 import { RootState } from "../../store";
 import "./register.scss";
 
-type RegisterProps = {};
 const Register = () => {
   const [registerData, setRegisterData] = useState({
     username: "",

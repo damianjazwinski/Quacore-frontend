@@ -1,6 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./profile.scss";
-import NavBar from "../../components/NavBar/NavBar";
 import QuacoreLayout from "../../components/QuacoreLayout/QuacoreLayout";
 import { getProfile } from "../../api/apiProfiles";
 import { useParams } from "react-router-dom";
@@ -39,7 +38,7 @@ const Profile = () => {
       <>
         <div className="profile-banner">
           {profile?.bannerImageLink ? (
-            <img src={profile?.bannerImageLink!} alt="Banner image." />
+            <img src={profile?.bannerImageLink!} alt="Banner" />
           ) : (
             <div className="profile-banner-placeholder"></div>
           )}
@@ -47,7 +46,7 @@ const Profile = () => {
         <div className="profile-header">
           <div className="profile-header-avatar">
             {profile?.avatarImageLink ? (
-              <img src={profile?.avatarImageLink!} alt="Avatar image." />
+              <img src={profile?.avatarImageLink!} alt="Avatar" />
             ) : (
               <div className="profile-header-avatar-placeholder"></div>
             )}

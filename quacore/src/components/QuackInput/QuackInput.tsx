@@ -1,9 +1,7 @@
-import { TextField } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { Profile as ProfileType } from "../../types/types";
 import { getProfile } from "../../api/apiProfiles";
 import "./quack-input.scss";
-import jwt_decode from "jwt-decode";
 import { getUsernameFromClaims } from "../../helpers/getUserInfo";
 import { Link } from "react-router-dom";
 

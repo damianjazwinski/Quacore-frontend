@@ -2,9 +2,7 @@ import React from "react";
 import {
   AppBar,
   Button,
-  Input,
   InputAdornment,
-  InputBase,
   TextField,
   Toolbar,
   Typography,

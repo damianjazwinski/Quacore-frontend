@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { addQuack, getQuacksFeed } from "../../api/apiQuacks";
-import NavBar from "../../components/NavBar/NavBar";
 import Quack from "../../components/Quack/Quack";
 import QuackInput from "../../components/QuackInput/QuackInput";
 import QuacoreLayout from "../../components/QuacoreLayout/QuacoreLayout";
@@ -17,6 +16,7 @@ const Home = () => {
   const isLoading = useRef(false);
 
   const quackObserverHandler = useCallback((element: HTMLDivElement | null) => {
+    console.log(element);
     if (!element) {
       lastQuackVisibleObserver.current?.disconnect();
       return;
@@ -47,7 +47,7 @@ const Home = () => {
         isLoading.current = false;
         setQuacksFeed((quacksFeed) => [...quacksFeed, ...response.quacks]);
       });
-  }, [shouldFetch]);
+  }, [shouldFetch]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const changeHandler = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setQuackInputValue(e.target.value);

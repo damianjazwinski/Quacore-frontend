@@ -7,7 +7,6 @@ import { login as loginReducer } from "../../slice";
 import { RootState } from "../../store";
 import "./login.scss";
 
-type LoginProps = {};
 const Login = () => {
   const [loginData, setLoginData] = useState({
     username: "",
