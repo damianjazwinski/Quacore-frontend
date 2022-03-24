@@ -11,6 +11,16 @@ export const getQuacksFeed = (startingId: number | null) => {
   return fetchApi("quack", urlArgumentString);
 };
 
-export const getQuacksFeedForUser = (username: string) => {
+export const getQuacksFeedForUser = (
+  username: string,
+  startingId: number | null
+) => {
+  if (startingId) {
+    return fetchApi(
+      "quack",
+      `get?username=${username}&startingId=${startingId}`
+    );
+  }
+
   return fetchApi("quack", `get?username=${username}`);
 };

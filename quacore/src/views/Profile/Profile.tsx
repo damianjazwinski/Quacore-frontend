@@ -1,9 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./profile.scss";
 import QuacoreLayout from "../../components/QuacoreLayout/QuacoreLayout";
 import { getProfile } from "../../api/apiProfiles";
 import { useParams } from "react-router-dom";
-import { Profile as ProfileType, Quack as QuackType } from "../../types/types";
+import {
+  Profile as ProfileType,
+  Quack as QuackType,
+  GetFeedResponse,
+} from "../../types/types";
 import moment from "moment";
 import Quack from "../../components/Quack/Quack";
 import { getQuacksFeedForUser } from "../../api/apiQuacks";
@@ -13,19 +17,60 @@ import { getUsernameFromClaims } from "../../helpers/getUserInfo";
 const Profile = () => {
   const [profile, setProfile] = useState<ProfileType>();
   const [quacks, setQuacks] = useState<QuackType[]>([]);
+  const [shouldFetch, setShouldFetch] = useState(true);
+
+  const lastQuackVisibleObserver = useRef<IntersectionObserver>();
+  const isLoading = useRef(false);
+  const areAnyQuacksLeft = useRef(true);
+
   const { username } = useParams();
+
+  const quackObserverHandler = useCallback((element: HTMLDivElement | null) => {
+    if (!areAnyQuacksLeft.current) return;
+
+    if (!element) {
+      lastQuackVisibleObserver.current?.disconnect();
+      return;
+    }
+    if (isLoading.current) return;
+    if (lastQuackVisibleObserver.current === undefined) {
+      lastQuackVisibleObserver.current = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            lastQuackVisibleObserver.current?.disconnect();
+            setShouldFetch(true);
+          }
+        },
+        { rootMargin: "300px" }
+      );
+    }
+    lastQuackVisibleObserver.current.observe(element);
+  }, []);
+
   //__________________________________________________________
   useEffect(() => {
     (async () => {
       const response = await getProfile(username!);
       const profile = await response.json();
       setProfile(profile);
-      // quacks fetching
-      const quackResponse = await getQuacksFeedForUser(username!);
-      const quacksData = await quackResponse.json();
-      setQuacks(quacksData.quacks);
     })();
   }, [username]);
+
+  useEffect(() => {
+    if (!shouldFetch) return;
+    isLoading.current = true;
+    (async () => {
+      const quackResponse = await getQuacksFeedForUser(
+        username!,
+        quacks[quacks.length - 1]?.id
+      );
+      const quacksData: GetFeedResponse = await quackResponse.json();
+      setShouldFetch(false);
+      isLoading.current = false;
+      areAnyQuacksLeft.current = quacksData.areAnyQuacksLeft;
+      setQuacks(quacksData.quacks);
+    })();
+  }, [username, shouldFetch]); // eslint-disable-line react-hooks/exhaustive-deps
   //____________________________________________________
   function generateButton(): React.ReactNode {
     if (getUsernameFromClaims() === username)
@@ -83,7 +128,11 @@ const Profile = () => {
         </div>
         <div className="profile-feed">
           {quacks.map((quack, index) => (
-            <Quack quack={quack} key={quack.id} />
+            <Quack
+              quack={quack}
+              key={quack.id}
+              ref={index === quacks.length - 1 ? quackObserverHandler : null}
+            />
           ))}
         </div>
       </>

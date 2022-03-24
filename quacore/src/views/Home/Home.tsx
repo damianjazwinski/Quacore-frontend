@@ -3,7 +3,7 @@ import { addQuack, getQuacksFeed } from "../../api/apiQuacks";
 import Quack from "../../components/Quack/Quack";
 import QuackInput from "../../components/QuackInput/QuackInput";
 import QuacoreLayout from "../../components/QuacoreLayout/QuacoreLayout";
-import { Quack as QuackType } from "../../types/types";
+import { Quack as QuackType, GetFeedResponse } from "../../types/types";
 import "./home.scss";
 
 const Home = () => {
@@ -14,9 +14,11 @@ const Home = () => {
 
   const lastQuackVisibleObserver = useRef<IntersectionObserver>();
   const isLoading = useRef(false);
+  const areAnyQuacksLeft = useRef(true);
 
   const quackObserverHandler = useCallback((element: HTMLDivElement | null) => {
-    console.log(element);
+    if (!areAnyQuacksLeft.current) return;
+
     if (!element) {
       lastQuackVisibleObserver.current?.disconnect();
       return;
@@ -42,9 +44,10 @@ const Home = () => {
     isLoading.current = true;
     getQuacksFeed(quacksFeed[quacksFeed.length - 1]?.id)
       .then((response) => response.json())
-      .then((response) => {
+      .then((response: GetFeedResponse) => {
         setShouldFetch(false);
         isLoading.current = false;
+        areAnyQuacksLeft.current = response.areAnyQuacksLeft;
         setQuacksFeed((quacksFeed) => [...quacksFeed, ...response.quacks]);
       });
   }, [shouldFetch]); // eslint-disable-line react-hooks/exhaustive-deps

@@ -23,3 +23,8 @@ export type JwtToken = {
   iss: string;
   aud: string;
 };
+
+export type GetFeedResponse = {
+  quacks: Quack[];
+  areAnyQuacksLeft: boolean;
+};
