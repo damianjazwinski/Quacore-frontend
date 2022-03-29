@@ -102,3 +102,10 @@
     }
   }
 }
+
+#edit-profile-dialog-form {
+  .form-controls-wrapper {
+    display: flex;
+    flex-direction: column;
+  }
+}
