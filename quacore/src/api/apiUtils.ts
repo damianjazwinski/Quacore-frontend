@@ -3,8 +3,7 @@ import { LoginResponse } from "./apiAuth";
 export const apiUrl = "https://localhost:5001/api/";
 
 export const fetchApi = (
-  controller: string,
-  action: string,
+  url: string,
   {
     method = "GET",
     payload = undefined,
@@ -26,6 +25,6 @@ export const fetchApi = (
     method: method,
     headers: myHeaders,
   };
-  const address = apiUrl + controller + "/" + action;
+  const address = apiUrl + url;
   return fetch(address, fetchOptions);
 };

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import "./profile.scss";
 import QuacoreLayout from "../../components/QuacoreLayout/QuacoreLayout";
-import { getProfile } from "../../api/apiProfiles";
+import { editProfile, getProfile } from "../../api/apiProfiles";
 import { useParams } from "react-router-dom";
 import {
   Profile as ProfileType,
@@ -11,34 +11,16 @@ import {
 import moment from "moment";
 import Quack from "../../components/Quack/Quack";
 import { getQuacksFeedForUser } from "../../api/apiQuacks";
-import {
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  FormControl,
-  Input,
-  InputLabel,
-  OutlinedInput,
-  Paper,
-  TextField,
-} from "@mui/material";
+import { Button } from "@mui/material";
 import { getUsernameFromClaims } from "../../helpers/getUserInfo";
-import { Controller, useForm } from "react-hook-form";
+import EditProfileDialog from "../EditProfileDialog/EditProfileDialog";
 
 const Profile = () => {
   const [profile, setProfile] = useState<ProfileType>();
   const [quacks, setQuacks] = useState<QuackType[]>([]);
   const [shouldFetch, setShouldFetch] = useState(true);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const {
-    handleSubmit,
-    control,
-    formState: { errors },
-    setValue,
-  } = useForm({});
-  console.log(profile);
+
   const lastQuackVisibleObserver = useRef<IntersectionObserver>();
   const isLoading = useRef(false);
   const areAnyQuacksLeft = useRef(true);
@@ -73,18 +55,10 @@ const Profile = () => {
       const response = await getProfile(username!);
       const profile = await response.json();
       setProfile(profile);
-      fillEditFormWithStateData();
     })();
   }, [username]);
 
-  const fillEditFormWithStateData = useCallback(() => {
-    setValue("description", profile?.description);
-    setValue("avatarImageLink", profile?.avatarImageLink);
-    setValue("bannerImageLink", profile?.bannerImageLink);
-  }, [profile]);
-
   useEffect(() => {
-    console.log(shouldFetch);
     if (!shouldFetch) return;
     isLoading.current = true;
     (async () => {
@@ -96,9 +70,9 @@ const Profile = () => {
       setShouldFetch(false);
       isLoading.current = false;
       areAnyQuacksLeft.current = quacksData.areAnyQuacksLeft;
-      setQuacks(quacksData.quacks);
+      setQuacks([...quacks, ...quacksData.quacks]);
     })();
-  }, [username, shouldFetch]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [username, shouldFetch, quacks]);
 
   const editProfileHandler = () => {
     setIsDialogOpen(true);
@@ -106,12 +80,21 @@ const Profile = () => {
 
   const closeEditProfileDialogHandler = () => {
     setIsDialogOpen(false);
-    fillEditFormWithStateData();
   };
 
   const submitProfileFormHandler = (data: any) => {
-    console.log(data);
     setIsDialogOpen(false);
+
+    editProfile(
+      profile?.username!,
+      data.description,
+      data.avatarImageLink,
+      data.bannerImageLink
+    )
+      .then((response) => response.json())
+      .then((dataResponse: ProfileType) => {
+        setProfile(dataResponse);
+      });
     // rozkminić flow wysłania danych edytujących profil i chuj
   };
 
@@ -183,72 +166,12 @@ const Profile = () => {
             />
           ))}
         </div>
-        <Dialog
-          open={isDialogOpen}
-          onClose={closeEditProfileDialogHandler}
-          maxWidth="sm"
-          fullWidth
-        >
-          <form
-            onSubmit={handleSubmit(submitProfileFormHandler)}
-            id="edit-profile-dialog-form"
-          >
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogContent>
-              <div className="form-controls-wrapper">
-                <Controller
-                  name="description"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <TextField
-                      variant="outlined"
-                      multiline
-                      label="Description"
-                      rows={3}
-                      id="description-edit-input"
-                      margin="dense"
-                      onChange={onChange}
-                      value={value}
-                    />
-                  )}
-                />
-
-                <Controller
-                  name="avatarImageLink"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <TextField
-                      variant="outlined"
-                      label="Avatar"
-                      id="avatarImageLink-edit-input"
-                      margin="dense"
-                      onChange={onChange}
-                      value={value}
-                    />
-                  )}
-                />
-                <Controller
-                  name="bannerImageLink"
-                  control={control}
-                  render={({ field: { onChange, value } }) => (
-                    <TextField
-                      variant="outlined"
-                      label="Banner"
-                      id="bannerImageLink-edit-input"
-                      margin="dense"
-                      onChange={onChange}
-                      value={value}
-                    />
-                  )}
-                />
-              </div>
-            </DialogContent>
-            <DialogActions>
-              <Button type="submit">Save</Button>
-              <Button onClick={closeEditProfileDialogHandler}>Cancel</Button>
-            </DialogActions>
-          </form>
-        </Dialog>
+        <EditProfileDialog
+          isDialogOpen={isDialogOpen}
+          onCloseHandler={closeEditProfileDialogHandler}
+          onSubmitHandler={submitProfileFormHandler}
+          profile={profile}
+        />
       </>
     </QuacoreLayout>
   );
